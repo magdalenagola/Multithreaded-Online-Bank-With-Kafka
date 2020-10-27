@@ -16,8 +16,10 @@ class Account {
 
     private BigDecimal balance;
 
+    @Enumerated(EnumType.STRING)
     private Currency currency;
 
+    @Enumerated(EnumType.STRING)
     private Type accountType;
 
     @ManyToOne
