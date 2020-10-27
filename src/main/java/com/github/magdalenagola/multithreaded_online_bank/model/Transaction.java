@@ -18,9 +18,9 @@ public class Transaction {
     @Id
     @GeneratedValue
     private Integer id;
-    @ManyToOne
+    @OneToOne
     private Account fromAccount;
-    @ManyToOne
+    @OneToOne
     private Account toAccount;
     private BigDecimal amount;
     private Date date;
