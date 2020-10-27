@@ -18,8 +18,10 @@ public class Transaction {
     @Id
     @GeneratedValue
     private Integer id;
+    @JoinColumn(name = "fromAccount")
     @OneToOne
     private Account fromAccount;
+    @JoinColumn(name = "toAccount")
     @OneToOne
     private Account toAccount;
     private BigDecimal amount;
