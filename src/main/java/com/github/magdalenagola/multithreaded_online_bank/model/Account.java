@@ -2,6 +2,7 @@ package com.github.magdalenagola.multithreaded_online_bank.model;
 
 import lombok.*;
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @AllArgsConstructor
@@ -11,7 +12,9 @@ import javax.persistence.*;
 class Account {
 
     @Id
-    private long accountNumber;
+    private String accountNumber;
+
+    private BigDecimal amount;
 
     private Currency currency;
 
@@ -19,4 +22,5 @@ class Account {
 
     @ManyToOne
     private User user;
+
 }
