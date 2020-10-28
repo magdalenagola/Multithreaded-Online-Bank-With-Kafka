@@ -5,6 +5,7 @@ import com.github.magdalenagola.multithreaded_online_bank.model.Account;
 import com.github.magdalenagola.multithreaded_online_bank.model.Transaction;
 import com.github.magdalenagola.multithreaded_online_bank.repository.AccountRepository;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -14,7 +15,7 @@ import java.util.logging.*;
 
 public class Converter implements Runnable {
 
-    private Logger logger = (Logger) LoggerFactory.getLogger(Converter.class);
+    private Logger logger = LoggerFactory.getLogger(Converter.class);
     private final String transactionData;
     private final ProducerService producerService;
     private final AccountRepository accountRepository;
@@ -31,7 +32,7 @@ public class Converter implements Runnable {
             convert(transactionData);
             logger.info("Transaction is being converted");
         } catch (Exception e) {
-            logger.warning("Transaction cannot be converted");
+            logger.warn("Transaction cannot be converted");
         }
     }
 
