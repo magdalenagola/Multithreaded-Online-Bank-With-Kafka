@@ -4,6 +4,7 @@ package com.github.magdalenagola.multithreaded_online_bank.file;
 import com.github.magdalenagola.multithreaded_online_bank.model.Account;
 import com.github.magdalenagola.multithreaded_online_bank.model.Transaction;
 import com.github.magdalenagola.multithreaded_online_bank.repository.AccountRepository;
+import com.github.magdalenagola.multithreaded_online_bank.transaction.ProducerService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
