@@ -11,7 +11,6 @@ import java.util.Date;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Transaction {
@@ -26,4 +25,11 @@ public class Transaction {
     private Account toAccount;
     private BigDecimal amount;
     private Date date;
+
+    public Transaction(BigDecimal amount, Date date, Account fromAccount, Account toAccount) {
+        this.amount = amount;
+        this.date = date;
+        this.fromAccount = fromAccount;
+        this.toAccount = toAccount;
+    }
 }
