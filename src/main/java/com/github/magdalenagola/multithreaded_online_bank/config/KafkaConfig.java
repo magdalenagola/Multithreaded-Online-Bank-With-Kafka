@@ -1,6 +1,7 @@
 package com.github.magdalenagola.multithreaded_online_bank.config;
 
 import com.github.magdalenagola.multithreaded_online_bank.model.Transaction;
+import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -50,7 +51,7 @@ class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<String, Transaction> userProducerFactory() {
+    public ProducerFactory<String, TransactionDTO> userProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapServers);
@@ -62,7 +63,7 @@ class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Transaction> userKafkaTemplate() {
+    public KafkaTemplate<String, TransactionDTO> userKafkaTemplate() {
         return new KafkaTemplate<>(userProducerFactory());
     }
     @Bean
