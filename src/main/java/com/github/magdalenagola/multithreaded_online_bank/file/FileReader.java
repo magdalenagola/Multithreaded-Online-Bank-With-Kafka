@@ -18,18 +18,16 @@ public class FileReader {
     private final static String FILE_NAME = "src/main/resources/transactions.csv";
     private final ExecutorService executorService = Executors.newFixedThreadPool(50);
     private final ProducerService producerService;
-    private final AccountRepository accountRepository;
 
-    public FileReader(ProducerService producerService, AccountRepository accountRepository) {
+    public FileReader(ProducerService producerService) {
         this.producerService = producerService;
-        this.accountRepository = accountRepository;
     }
 
     public void read(){
         try (Scanner scanner = new Scanner(new File(FILE_NAME))) {
             while (scanner.hasNext()) {
                 System.out.println(scanner.nextLine());
-                Runnable converter = new Converter(producerService, scanner.nextLine(), accountRepository);
+                Runnable converter = new Converter(producerService, scanner.nextLine());
                 Future<?> future = executorService.submit(converter);
                 try {
                     future.get();
