@@ -1,10 +1,13 @@
 package com.github.magdalenagola.multithreaded_online_bank.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class TransactionDTO {
     private BigDecimal amount;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date date;
     private String fromAccount;
     private String toAccount;
