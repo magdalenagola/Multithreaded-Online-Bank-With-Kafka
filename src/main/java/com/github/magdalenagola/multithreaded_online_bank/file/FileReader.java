@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 @Component
 public class FileReader {
 
-    private final static String FILE_NAME = "transactions.csv";
+    private final static String FILE_NAME = "src/main/resources/transactions.csv";
     private final ExecutorService executorService = Executors.newFixedThreadPool(50);
     private final ProducerService producerService;
     private final AccountRepository accountRepository;
