@@ -53,12 +53,14 @@ class KafkaConfig {
     @Bean
     public ProducerFactory<String, TransactionDTO> userProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
                 bootstrapServers);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 JsonSerializer.class);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
                 JsonSerializer.class);
+        configProps.put(ProducerConfig.RETRIES_CONFIG,
+                5);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 

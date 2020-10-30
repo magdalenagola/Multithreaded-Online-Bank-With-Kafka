@@ -22,12 +22,9 @@ public class ProducerService {
         Runnable producer = new Producer(transaction, kafkaTemplate);
         Future<?> future = executorService.submit(producer);
         try {
-              future.get();
-              if(!future.isDone())
-                throw new IllegalArgumentException("Unable to send to kafka");
+            future.get();
         } catch (InterruptedException | ExecutionException e) {
-           //throw new IllegalArgumentException("Unable to send to kafka");
-            e.printStackTrace();
+            throw new IllegalArgumentException("Sending to kafka failed");
         }
     }
 }
