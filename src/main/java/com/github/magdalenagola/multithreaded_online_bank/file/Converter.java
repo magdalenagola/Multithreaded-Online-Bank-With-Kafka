@@ -7,14 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 
 public class Converter implements Runnable {
 
-    private Logger logger = LoggerFactory.getLogger(Converter.class); //make static and synchronize
+    private static Logger logger = LoggerFactory.getLogger(Converter.class);
     private final String transactionData;
     private final ProducerService producerService;
 
@@ -25,22 +25,25 @@ public class Converter implements Runnable {
 
     @Override
     public void run() {
-        try {
-            convert(transactionData);
-            logger.info("Transaction is being converted");
-        } catch (Exception e) {
-            logger.warn("Transaction cannot be converted " + e.getCause());
-            e.printStackTrace();
-        }
+        convert(transactionData);
     }
 
-    private void convert(String transactionData) throws ParseException {
+    private void convert(String transactionData) {
         String[] transactionDataSplitted = transactionData.split(";");
-        BigDecimal amount = new BigDecimal(transactionDataSplitted[0]);
-        Date date = new SimpleDateFormat("dd/mm/yyyy").parse(transactionDataSplitted[1]);
-        String fromAccount = transactionDataSplitted[2];
-        String toAccount = transactionDataSplitted[3];
-        TransactionDTO transaction = new TransactionDTO(amount, date, fromAccount, toAccount);
-        producerService.sendToKafka(transaction);
+        try {
+            BigDecimal amount = new BigDecimal(transactionDataSplitted[0]);
+            Date date = new SimpleDateFormat("dd/mm/yyyy").parse(transactionDataSplitted[1]);
+            String fromAccount = Optional.ofNullable(transactionDataSplitted[2]).orElseThrow(IllegalArgumentException::new);
+            String toAccount = Optional.ofNullable(transactionDataSplitted[3]).orElseThrow(IllegalArgumentException::new);
+            TransactionDTO transaction = new TransactionDTO(amount, date, fromAccount, toAccount);
+            synchronized (Converter.class) {
+                logger.info("Transaction " + transaction.toString() + " was succesfully converted");
+            }
+            producerService.sendToKafka(transaction);
+        } catch (Exception e) {
+            synchronized (Converter.class) {
+                logger.error("Transaction " + transactionData + " was not converted\n" + e.toString());
+            }
+        }
     }
 }
