@@ -25,19 +25,15 @@ public class Converter implements Runnable {
 
     @Override
     public void run() {
-        convert(transactionData);
-    }
-
-    private void convert(String transactionData) {
-        String[] transactionDataSplitted = transactionData.split(";");
+        String[] transactionDataSplit = transactionData.split(";");
         try {
-            BigDecimal amount = new BigDecimal(transactionDataSplitted[0]);
-            Date date = new SimpleDateFormat("dd/mm/yyyy").parse(transactionDataSplitted[1]);
-            String fromAccount = Optional.ofNullable(transactionDataSplitted[2]).orElseThrow(IllegalArgumentException::new);
-            String toAccount = Optional.ofNullable(transactionDataSplitted[3]).orElseThrow(IllegalArgumentException::new);
+            BigDecimal amount = new BigDecimal(transactionDataSplit[0]);
+            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(transactionDataSplit[1]);
+            String fromAccount = Optional.ofNullable(transactionDataSplit[2]).orElseThrow(IllegalArgumentException::new);
+            String toAccount = Optional.ofNullable(transactionDataSplit[3]).orElseThrow(IllegalArgumentException::new);
             TransactionDTO transaction = new TransactionDTO(amount, date, fromAccount, toAccount);
             synchronized (Converter.class) {
-                logger.info("Transaction " + transaction.toString() + " was succesfully converted");
+                logger.info("Transaction " + transaction.toString() + " was successfully converted");
             }
             producerService.sendToKafka(transaction);
         } catch (Exception e) {
