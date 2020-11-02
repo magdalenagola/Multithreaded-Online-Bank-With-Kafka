@@ -25,7 +25,9 @@ public class Consumer implements Runnable {
     }
 
     private Transaction convert(TransactionDTO transactionDTO){
-        return null;
+        Account fromAccount = accountRepository.findById(transactionDTO.getFromAccount()).orElseThrow(IllegalArgumentException::new);
+        Account toAccount = accountRepository.findById(transactionDTO.getToAccount()).orElseThrow(IllegalArgumentException::new);
+        return new Transaction(transactionDTO.getAmount(), transactionDTO.getDate(), fromAccount, toAccount);
     }
 
     private boolean checkIfTransactionIsValid(TransactionDTO transactionDTO){
