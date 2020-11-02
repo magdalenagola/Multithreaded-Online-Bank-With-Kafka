@@ -8,6 +8,9 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+
 public class Producer implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(Producer.class);
     private final String TOPIC = "transaction";
@@ -20,7 +23,7 @@ public class Producer implements Runnable {
     }
 
     @Override
-    public void run()throws IllegalArgumentException {
+    public void run() {
         ListenableFuture<SendResult<String, TransactionDTO>> future = kafkaTemplate.send(TOPIC, transaction);
         future.addCallback(new ListenableFutureCallback<SendResult<String, TransactionDTO>>() {
             @Override
@@ -32,7 +35,7 @@ public class Producer implements Runnable {
                 }
             }
             @Override
-            public void onFailure(Throwable ex)throws IllegalArgumentException {
+            public void onFailure(Throwable ex){
                 synchronized (Producer.class) {
                     LOG.warn("Unable to deliver transaction [{}] ! {}",
                             transaction.toString(),
@@ -40,5 +43,11 @@ public class Producer implements Runnable {
                 }
             }
         });
+
+        try {
+            future.get();
+        } catch (InterruptedException | ExecutionException | CancellationException e) {
+            throw new RuntimeException("Future failure");
+        }
     }
 }

@@ -1,13 +1,12 @@
 package com.github.magdalenagola.multithreaded_online_bank.transaction;
 
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 @Service
 public class ProducerService {
@@ -18,13 +17,14 @@ public class ProducerService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendToKafka(TransactionDTO transaction)throws IllegalArgumentException{
+    public ResponseEntity<String> sendToKafka(TransactionDTO transaction){
         Runnable producer = new Producer(transaction, kafkaTemplate);
         Future<?> future = executorService.submit(producer);
         try {
             future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new IllegalArgumentException("Sending to kafka failed");
+            return new ResponseEntity<>("Successfully send to kafka", HttpStatus.ACCEPTED);
+        } catch (InterruptedException | ExecutionException | CancellationException e) {
+            return new ResponseEntity<>("Unable to send to kafka", HttpStatus.REQUEST_TIMEOUT);
         }
     }
 }
