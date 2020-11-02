@@ -1,6 +1,5 @@
 package com.github.magdalenagola.multithreaded_online_bank.config;
 
-import com.github.magdalenagola.multithreaded_online_bank.model.Transaction;
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -60,7 +59,9 @@ class KafkaConfig {
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
                 JsonSerializer.class);
         configProps.put(ProducerConfig.RETRIES_CONFIG,
-                5);
+                1);
+        configProps.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG,
+                30000);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
