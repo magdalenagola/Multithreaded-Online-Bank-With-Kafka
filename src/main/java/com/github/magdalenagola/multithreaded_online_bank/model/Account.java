@@ -25,4 +25,7 @@ public class Account {
     @ManyToOne
     private User user;
 
+    public BigDecimal getBalance() {
+        return balance;
+    }
 }
