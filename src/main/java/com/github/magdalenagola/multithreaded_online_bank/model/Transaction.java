@@ -32,4 +32,16 @@ public class Transaction {
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
     }
+
+    public Account getFromAccount() {
+        return fromAccount;
+    }
+
+    public Account getToAccount() {
+        return toAccount;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
 }
