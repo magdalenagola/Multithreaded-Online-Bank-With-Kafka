@@ -22,6 +22,7 @@ public class FileReader {
 
     public void read(){
         try (Scanner scanner = new Scanner(new File(FILE_NAME))) {
+            scanner.nextLine(); // skip the titles
             while (scanner.hasNext()) {
                 Runnable converter = new Converter(producerService, scanner.nextLine());
                 executorService.submit(converter);
