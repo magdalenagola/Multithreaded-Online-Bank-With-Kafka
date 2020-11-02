@@ -26,20 +26,22 @@ public class Converter implements Runnable {
     @Override
     public void run() {
         String[] transactionDataSplit = transactionData.split(";");
+        TransactionDTO transaction;
         try {
             BigDecimal amount = new BigDecimal(transactionDataSplit[0]);
             Date date = new SimpleDateFormat("dd/MM/yyyy").parse(transactionDataSplit[1]);
             String fromAccount = Optional.ofNullable(transactionDataSplit[2]).orElseThrow(IllegalArgumentException::new);
             String toAccount = Optional.ofNullable(transactionDataSplit[3]).orElseThrow(IllegalArgumentException::new);
-            TransactionDTO transaction = new TransactionDTO(amount, date, fromAccount, toAccount);
+            transaction = new TransactionDTO(amount, date, fromAccount, toAccount);
             synchronized (Converter.class) {
                 logger.info("Transaction " + transaction.toString() + " was successfully converted");
             }
-            producerService.sendToKafka(transaction);
         } catch (Exception e) {
             synchronized (Converter.class) {
                 logger.error("Transaction " + transactionData + " was not converted\n" + e.toString());
             }
+            return;
         }
+        producerService.sendToKafka(transaction);
     }
 }
