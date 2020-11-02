@@ -5,10 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.concurrent.*;
 
 @Service
+@Validated
 public class ProducerService {
     private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
     private final KafkaTemplate<String, TransactionDTO> kafkaTemplate;
@@ -17,7 +20,7 @@ public class ProducerService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public ResponseEntity<String> sendToKafka(TransactionDTO transaction){
+    public ResponseEntity<String> sendToKafka(@Valid TransactionDTO transaction){
         Runnable producer = new Producer(transaction, kafkaTemplate);
         Future<?> future = executorService.submit(producer);
         try {
