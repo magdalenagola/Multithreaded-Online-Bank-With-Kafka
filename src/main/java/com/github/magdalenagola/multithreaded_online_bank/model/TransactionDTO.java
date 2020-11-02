@@ -1,15 +1,27 @@
 package com.github.magdalenagola.multithreaded_online_bank.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.github.magdalenagola.multithreaded_online_bank.validator.AccountNumber;
+import com.github.magdalenagola.multithreaded_online_bank.validator.ExistingNumber;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class TransactionDTO {
+    @Min(1)
+    @NotNull
     private BigDecimal amount;
+    @NotNull
     @JsonFormat(pattern="dd-MM-yyyy")
     private Date date;
+    @AccountNumber
+    @ExistingNumber
     private String fromAccount;
+    @AccountNumber
+    @ExistingNumber
     private String toAccount;
 
     public TransactionDTO() {
