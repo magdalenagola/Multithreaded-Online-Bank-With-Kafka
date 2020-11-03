@@ -11,8 +11,8 @@ import java.util.concurrent.*;
 public class ConsumerService {
 
     private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
-    private TransactionService transactionService;
-    private AccountRepository accountRepository;
+    private final TransactionService transactionService;
+    private final AccountRepository accountRepository;
 
     public ConsumerService(TransactionService transactionService, AccountRepository accountRepository) {
         this.transactionService = transactionService;
@@ -26,7 +26,7 @@ public class ConsumerService {
         try {
             future.get();
         } catch (InterruptedException | ExecutionException | CancellationException e) {
-            throw new RuntimeException("Consumer future failure");
+            e.printStackTrace();
         }
     }
 }
