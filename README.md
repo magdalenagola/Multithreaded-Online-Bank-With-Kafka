@@ -94,7 +94,20 @@ bin/kafka-server-start.sh config/server.properties
 ## Usage <a name = "usage"></a>
 Swagger not uploaded yet.
  http://localhost:8080/swagger-ui.html#/
-  
+ 
+ Example usage:
+ ```
+curl -d '{
+             "amount": "YOUR INPUT",
+             "date":"YOUR INPUT",
+             "fromAccount": "YOUR INPUT",
+             "toAccount":"YOUR INPUT"
+            
+         }' -H "Content-Type: application/json" -X POST http://localhost:8080/transaction
+```
+
+Note that you have to insert existing accounts numbers (in database) to end transaction successfully.
+
 ## Contact <a name = "contact"></a>
 Feel free to contact us.
  * turcza.magdalena@gmail.com
