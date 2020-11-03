@@ -106,7 +106,7 @@ curl -d '{
          }' -H "Content-Type: application/json" -X POST http://localhost:8080/transaction
 ```
 
-Note that you have to insert existing accounts numbers (in database) to end transaction successfully.
+Please note that you have to provide the correct accounts' numbers (the ones that exist in the database)  for the transaction to be processed successfully.
 
 ## Contact <a name = "contact"></a>
 Feel free to contact us.
