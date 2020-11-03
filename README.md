@@ -31,7 +31,7 @@ git clone https://github.com/magdalenagola/Multithreaded-Online-Bank-With-Kafka
 
 If you don't have Kafka installed yet, you can download it from: [Download Apache Kafka](https://kafka.apache.org/downloads)
 
-Build it with gradle as following in instruction file.
+Build it with gradle following the instructions file.
 
 
 
