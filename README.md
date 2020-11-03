@@ -65,7 +65,7 @@ To run our application simply follow instructions:
 
 -Navigate to Kafka's directory:
 ```
-cd directory when you extracted kafka
+cd directory where you have extracted kafka
 ```
 -You have to run kafka's server (in first terminal!):
 ```
