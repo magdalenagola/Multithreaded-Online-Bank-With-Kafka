@@ -11,6 +11,9 @@
 
 ## About <a name = "about"></a>
 
+This is an open source project created for learning purposes. This online bank web application handles requests with transactions data and process them in a multithreaded manner using Apache Kafka. The transactions are validated and saved accordingly in the database.
+
+Application handles not only http requests but is also able to process big amount of transactions listed in a CSV file.
 
 ## Built With <a name = "built-with"></a>
 
