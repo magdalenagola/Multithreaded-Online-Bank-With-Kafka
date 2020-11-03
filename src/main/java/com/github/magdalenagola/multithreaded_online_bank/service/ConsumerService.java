@@ -3,16 +3,18 @@ package com.github.magdalenagola.multithreaded_online_bank.service;
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
 import com.github.magdalenagola.multithreaded_online_bank.repository.AccountRepository;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.*;
 
-public class ListenerService {
+@Service
+public class ConsumerService {
 
     private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
     private TransactionService transactionService;
     private AccountRepository accountRepository;
 
-    public ListenerService(TransactionService transactionService, AccountRepository accountRepository) {
+    public ConsumerService(TransactionService transactionService, AccountRepository accountRepository) {
         this.transactionService = transactionService;
         this.accountRepository = accountRepository;
     }
