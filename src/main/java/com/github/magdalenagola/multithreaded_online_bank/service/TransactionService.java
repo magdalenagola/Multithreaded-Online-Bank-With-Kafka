@@ -16,8 +16,9 @@ public class TransactionService {
     TransactionRepository transactionRepository;
     AccountRepository accountRepository;
 
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
+        this.accountRepository = accountRepository;
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
