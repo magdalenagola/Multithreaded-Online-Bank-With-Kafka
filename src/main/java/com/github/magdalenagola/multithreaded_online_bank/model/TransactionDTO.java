@@ -7,10 +7,11 @@ import com.github.magdalenagola.multithreaded_online_bank.validator.ExistingNumb
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TransactionDTO {
+public class TransactionDTO implements Serializable {
     @Min(1)
     @NotNull
     private BigDecimal amount;
