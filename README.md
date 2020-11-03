@@ -1,4 +1,4 @@
-# Virtual-Stylist
+# Multithreaded-Online-Bank-With-Kafka
 
 ## Table of Contents
 
