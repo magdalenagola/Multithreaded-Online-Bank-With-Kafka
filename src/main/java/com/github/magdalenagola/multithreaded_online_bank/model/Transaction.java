@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class Transaction {
     @OneToOne
     private Account toAccount;
     private BigDecimal amount;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date date;
 
     public Transaction(BigDecimal amount, Date date, Account fromAccount, Account toAccount) {
