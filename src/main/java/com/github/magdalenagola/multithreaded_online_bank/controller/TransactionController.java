@@ -1,6 +1,7 @@
-package com.github.magdalenagola.multithreaded_online_bank.transaction;
+package com.github.magdalenagola.multithreaded_online_bank.controller;
 
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
+import com.github.magdalenagola.multithreaded_online_bank.service.ProducerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

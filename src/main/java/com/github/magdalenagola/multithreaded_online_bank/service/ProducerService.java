@@ -1,4 +1,4 @@
-package com.github.magdalenagola.multithreaded_online_bank.transaction;
+package com.github.magdalenagola.multithreaded_online_bank.service;
 
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
 import org.springframework.http.HttpStatus;
