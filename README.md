@@ -108,6 +108,8 @@ curl -d '{
 
 Please note that you have to provide the correct accounts' numbers (the ones that exist in the database)  for the transaction to be processed successfully.
 
+
+If you want to process many transactions you can put the transactions' data in the 'transactions.csv' file in the resources package. They will be processed automatically when the application starts.
 ## Contact <a name = "contact"></a>
 Feel free to contact us.
  * turcza.magdalena@gmail.com
