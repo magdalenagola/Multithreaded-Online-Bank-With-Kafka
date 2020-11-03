@@ -67,11 +67,11 @@ To run our application simply follow instructions:
 ```
 cd directory where you have extracted kafka
 ```
--You have to run kafka's server (in first terminal!):
+-You have to run kafka's server:
 ```
 bin/zookeeper-server-start.sh config/zookeeper.properties
 ```
--Again navigate to kafka's directory and run kafka's broker (in second terminal!):
+-Open new terminal window, again navigate to kafka's directory and run kafka's broker:
 ```
 bin/kafka-server-start.sh config/server.properties
 ```
