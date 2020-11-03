@@ -28,16 +28,21 @@ Application handles not only http requests but is also able to process big amoun
 Clone our repository using :
 
 ```
-https://github.com/magdalenagola/Multithreaded-Online-Bank-With-Kafka
+git clone https://github.com/magdalenagola/Multithreaded-Online-Bank-With-Kafka
 ```
 
-Maven properties will be set automatically.
+
+If you don't have Kafka installed yet, you can download it from: [Download Apache Kafka](https://kafka.apache.org/downloads)
+
+Build it with gradle following the instructions file.
+
+
 
 ### Important!
 
 To run the application you need to set some data in the application properties file (src/main/resources/application.properties), that is:
 - postgres database credentials:
-- kafka configuration
+- Kafka configuration
 
 ```spring.datasource.url=
    spring.datasource.username=
@@ -59,7 +64,21 @@ psql -h hostname -d databasename -U username -f backup_inserts.sql
 
 ## Run <a name = "run"></a>
 
-To run our application simply type following commands in terminal (project directory):
+To run our application simply follow instructions:
+
+-Navigate to Kafka's directory:
+```
+cd directory where you have extracted kafka
+```
+-You have to run kafka's server:
+```
+bin/zookeeper-server-start.sh config/zookeeper.properties
+```
+-Open new terminal window, again navigate to kafka's directory and run kafka's broker:
+```
+bin/kafka-server-start.sh config/server.properties
+```
+-Now, navigate to project directory and run following commands:
 ```
   mvn package
 ```
