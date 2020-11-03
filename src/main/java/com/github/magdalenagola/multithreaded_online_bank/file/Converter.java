@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
+import java.util.TimeZone;
 
 
 public class Converter implements Runnable {
@@ -29,7 +30,9 @@ public class Converter implements Runnable {
         TransactionDTO transaction;
         try {
             BigDecimal amount = new BigDecimal(transactionDataSplit[0]);
-            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(transactionDataSplit[1]);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = simpleDateFormat.parse(transactionDataSplit[1]);
             String fromAccount = Optional.ofNullable(transactionDataSplit[2]).orElseThrow(IllegalArgumentException::new);
             String toAccount = Optional.ofNullable(transactionDataSplit[3]).orElseThrow(IllegalArgumentException::new);
             transaction = new TransactionDTO(amount, date, fromAccount, toAccount);
