@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -26,15 +27,18 @@ public class Converter implements Runnable {
 
     @Override
     public void run() {
-        String[] transactionDataSplit = transactionData.split(";");
-        TransactionDTO transaction;
+        String[] attributes = transactionData.split(";");
+        Optional<TransactionDTO> transactionPossibly = getTransactionDTO(attributes);
+        transactionPossibly.ifPresent(producerService::sendToKafka);
+    }
+
+    private Optional<TransactionDTO> getTransactionDTO(String[] attributes) {
+        TransactionDTO transaction = null;
         try {
-            BigDecimal amount = new BigDecimal(transactionDataSplit[0]);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            Date date = simpleDateFormat.parse(transactionDataSplit[1]);
-            String fromAccount = Optional.ofNullable(transactionDataSplit[2]).orElseThrow(IllegalArgumentException::new);
-            String toAccount = Optional.ofNullable(transactionDataSplit[3]).orElseThrow(IllegalArgumentException::new);
+            BigDecimal amount = new BigDecimal(attributes[0]);
+            Date date = getDate(attributes[1]);
+            String fromAccount = Optional.ofNullable(attributes[2]).orElseThrow(IllegalArgumentException::new);
+            String toAccount = Optional.ofNullable(attributes[3]).orElseThrow(IllegalArgumentException::new);
             transaction = new TransactionDTO(amount, date, fromAccount, toAccount);
             synchronized (Converter.class) {
                 logger.info("Transaction " + transaction.toString() + " was successfully converted");
@@ -43,8 +47,13 @@ public class Converter implements Runnable {
             synchronized (Converter.class) {
                 logger.error("Transaction " + transactionData + " was not converted\n" + e.toString());
             }
-            return;
         }
-        producerService.sendToKafka(transaction);
+        return Optional.ofNullable(transaction);
+    }
+
+    private Date getDate(String dateAttribute) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return simpleDateFormat.parse(dateAttribute);
     }
 }
