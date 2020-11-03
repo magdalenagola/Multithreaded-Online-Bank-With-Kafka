@@ -1,6 +1,6 @@
 package com.github.magdalenagola.multithreaded_online_bank.file;
 
-import com.github.magdalenagola.multithreaded_online_bank.transaction.ProducerService;
+import com.github.magdalenagola.multithreaded_online_bank.service.ProducerService;
 import org.springframework.stereotype.Component;
 
 import java.io.File;

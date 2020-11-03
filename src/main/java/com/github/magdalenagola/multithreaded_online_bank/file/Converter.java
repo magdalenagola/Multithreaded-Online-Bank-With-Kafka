@@ -2,7 +2,7 @@ package com.github.magdalenagola.multithreaded_online_bank.file;
 
 
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
-import com.github.magdalenagola.multithreaded_online_bank.transaction.ProducerService;
+import com.github.magdalenagola.multithreaded_online_bank.service.ProducerService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
