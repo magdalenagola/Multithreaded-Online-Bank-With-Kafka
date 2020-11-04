@@ -1,9 +1,10 @@
 package com.github.magdalenagola.multithreaded_online_bank.service;
 
+import com.github.magdalenagola.multithreaded_online_bank.model.Reply;
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -14,20 +15,27 @@ import java.util.concurrent.*;
 @Validated
 public class ProducerService {
     private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
-    private final KafkaTemplate<String, TransactionDTO> kafkaTemplate;
+    private final ReplyingKafkaTemplate<String, TransactionDTO, Reply> kafkaTemplate;
 
-    public ProducerService(KafkaTemplate<String, TransactionDTO> kafkaTemplate) {
+    public ProducerService(ReplyingKafkaTemplate<String, TransactionDTO, Reply> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public ResponseEntity<String> sendToKafka(@Valid TransactionDTO transaction){
-        Runnable producer = new Producer(transaction, kafkaTemplate);
-        Future<?> future = executorService.submit(producer);
+        Callable<Reply> producer = new Producer(transaction, kafkaTemplate);
+        Future<Reply> future = executorService.submit(producer);
         try {
-            future.get();
-            return new ResponseEntity<>("Successfully send to kafka", HttpStatus.ACCEPTED);
+            Reply reply = future.get();
+            switch(reply){
+                case SUCCESS:
+                    return new ResponseEntity<>("Successful transaction!\n"+transaction.toString(), HttpStatus.ACCEPTED);
+                case FAILURE:
+                    return new ResponseEntity<>("Balance on the account is too low to perform the transaction.\n"+transaction.toString(),HttpStatus.BAD_REQUEST);
+                default:
+                    return new ResponseEntity<>("Try again later", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         } catch (InterruptedException | ExecutionException | CancellationException e) {
-            return new ResponseEntity<>("Unable to send to kafka", HttpStatus.REQUEST_TIMEOUT);
+            return new ResponseEntity<>("Unable to send to kafka\n"+transaction.toString(), HttpStatus.REQUEST_TIMEOUT);
         }
     }
 }

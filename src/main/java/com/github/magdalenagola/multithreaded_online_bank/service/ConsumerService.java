@@ -1,10 +1,12 @@
 package com.github.magdalenagola.multithreaded_online_bank.service;
 
+import com.github.magdalenagola.multithreaded_online_bank.model.Reply;
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
 import com.github.magdalenagola.multithreaded_online_bank.repository.AccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.*;
@@ -22,14 +24,17 @@ public class ConsumerService {
     }
 
     @KafkaListener(topics = "transaction", groupId = "test-consumer-group")
-    public void listen(TransactionDTO transactionDTO) {
+    @SendTo
+    public Reply listen(TransactionDTO transactionDTO) {
         Runnable consumer = new Consumer(transactionDTO, transactionService, accountRepository);
         Future<?> future = executorService.submit(consumer);
         try {
             future.get();
             LOG.info(String.format("Transaction successfully saved to database! \n%s!", transactionDTO.toString()));
+            return Reply.SUCCESS;
         } catch (InterruptedException | ExecutionException | CancellationException e) {
             LOG.warn(String.format("Transaction failure! %s \n  %s!", transactionDTO.toString(),e.getMessage()));
+            return Reply.FAILURE;
         }
     }
 }
