@@ -1,5 +1,6 @@
 package com.github.magdalenagola.multithreaded_online_bank.config;
 
+import com.github.magdalenagola.multithreaded_online_bank.model.Reply;
 import com.github.magdalenagola.multithreaded_online_bank.model.Transaction;
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -15,6 +16,9 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.kafka.listener.KafkaMessageListenerContainer;
+import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
@@ -29,6 +33,7 @@ class KafkaConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
     private String groupId = "test-consumer-group";
+    private String requestReplyTopic = "transaction-reply";
 
     @Bean
     public ProducerFactory<String, TransactionDTO> userProducerFactory() {
@@ -47,8 +52,19 @@ class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, TransactionDTO> userKafkaTemplate() {
+    public KafkaTemplate<String, TransactionDTO> kafkaTemplate() {
         return new KafkaTemplate<>(userProducerFactory());
+    }
+
+    @Bean
+    public ReplyingKafkaTemplate<String, TransactionDTO, Reply> replyingKafkaTemplate(ProducerFactory<String, TransactionDTO> producerFactory, KafkaMessageListenerContainer<String, Reply> listenerContainer) {
+        return new ReplyingKafkaTemplate<>(producerFactory,listenerContainer);
+    }
+
+    @Bean
+    public KafkaMessageListenerContainer<String, Reply> replyContainer(ConsumerFactory<String,Reply> consumerFactory){
+        ContainerProperties containerProperties = new ContainerProperties(requestReplyTopic);
+        return new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
     }
     @Bean
     public NewTopic topic1() {
@@ -56,7 +72,7 @@ class KafkaConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, TransactionDTO> consumerFactory() {
+    public ConsumerFactory<String, Reply> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -70,16 +86,17 @@ class KafkaConfig {
         props.put(
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 JsonDeserializer.class);
-        return new DefaultKafkaConsumerFactory<>(props,new StringDeserializer(), new ErrorHandlingDeserializer<>(new JsonDeserializer<>(TransactionDTO.class)));
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),new JsonDeserializer<>(Reply.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, TransactionDTO>
+    public ConcurrentKafkaListenerContainerFactory<String, Reply>
     kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, TransactionDTO> factory =
+        ConcurrentKafkaListenerContainerFactory<String, Reply> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setReplyTemplate(kafkaTemplate());
         return factory;
     }
 }
