@@ -20,7 +20,7 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        if (!checkIfTransactionIsValid(transactionDTO)) throw new IllegalArgumentException("Balance on the account is to low to perform the transaction: " + transactionDTO.toString());
+        if (!checkIfTransactionIsValid(transactionDTO)) throw new IllegalArgumentException("Balance on the account is too low to perform the transaction: " + transactionDTO.toString());
         transactionService.save(convert(transactionDTO));
     }
 
