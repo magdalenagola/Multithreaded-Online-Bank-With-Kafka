@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 
 @Service
-public class TransactionService {
+class TransactionService {
 
     TransactionRepository transactionRepository;
     AccountRepository accountRepository;
