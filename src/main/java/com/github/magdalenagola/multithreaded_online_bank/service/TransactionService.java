@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 @Service
 class TransactionService {
 
-    TransactionRepository transactionRepository;
-    AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
+    private final AccountRepository accountRepository;
 
     public TransactionService(TransactionRepository transactionRepository, AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
