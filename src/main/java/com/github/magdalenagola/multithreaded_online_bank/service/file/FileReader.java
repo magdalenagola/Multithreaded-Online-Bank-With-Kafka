@@ -1,4 +1,4 @@
-package com.github.magdalenagola.multithreaded_online_bank.file;
+package com.github.magdalenagola.multithreaded_online_bank.service.file;
 
 import org.springframework.stereotype.Service;
 
@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 @Service
-public class FileReader {
+class FileReader {
 
     private final static String FILE_NAME = "src/main/resources/transactions.csv";
     private final LineParser lineParser;
@@ -20,7 +20,7 @@ public class FileReader {
         try (Scanner scanner = new Scanner(new File(FILE_NAME))) {
             scanner.nextLine(); // skip the titles
             while (scanner.hasNext()) {
-               lineParser.parse(scanner.next());
+               lineParser.parse(scanner.nextLine());
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

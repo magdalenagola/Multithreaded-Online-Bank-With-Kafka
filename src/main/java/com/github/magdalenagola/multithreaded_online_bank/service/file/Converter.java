@@ -1,4 +1,4 @@
-package com.github.magdalenagola.multithreaded_online_bank.file;
+package com.github.magdalenagola.multithreaded_online_bank.service.file;
 
 
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
@@ -13,8 +13,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.TimeZone;
 
-
-public class Converter implements Runnable {
+class Converter implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(Converter.class);
     private final String transactionData;
