@@ -23,6 +23,7 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +59,10 @@ class KafkaConfig {
 
     @Bean
     public ReplyingKafkaTemplate<String, TransactionDTO, Reply> replyingKafkaTemplate(ProducerFactory<String, TransactionDTO> producerFactory, KafkaMessageListenerContainer<String, Reply> listenerContainer) {
-        return new ReplyingKafkaTemplate<>(producerFactory,listenerContainer);
+        ReplyingKafkaTemplate<String, TransactionDTO, Reply> replyingKafkaTemplate = new ReplyingKafkaTemplate<>(producerFactory, listenerContainer);
+        replyingKafkaTemplate.setSharedReplyTopic(true);
+        replyingKafkaTemplate.setDefaultReplyTimeout(Duration.ofMillis(10000));
+        return replyingKafkaTemplate;
     }
 
     @Bean
@@ -70,6 +74,7 @@ class KafkaConfig {
     public NewTopic topic1() {
         return TopicBuilder.name("transaction").build();
     }
+
 
     @Bean
     public ConsumerFactory<String, Reply> consumerFactory() {

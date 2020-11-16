@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.*;
 
 @Service
-public class ConsumerService {
+class ConsumerService {
     private static final Logger LOG = LoggerFactory.getLogger(ConsumerService.class);
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(16);
     private final TransactionService transactionService;
     private final AccountRepository accountRepository;
 
@@ -23,8 +23,8 @@ public class ConsumerService {
         this.accountRepository = accountRepository;
     }
 
-    @KafkaListener(topics = "transaction", groupId = "test-consumer-group")
-    @SendTo
+    @KafkaListener(topics = "transaction", groupId = "test-consumer-group", containerFactory = "kafkaListenerContainerFactory")
+    @SendTo("transaction-reply")
     public Reply listen(TransactionDTO transactionDTO) {
         Runnable consumer = new Consumer(transactionDTO, transactionService, accountRepository);
         Future<?> future = executorService.submit(consumer);

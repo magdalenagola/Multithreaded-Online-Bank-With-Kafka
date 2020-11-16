@@ -1,4 +1,4 @@
-package com.github.magdalenagola.multithreaded_online_bank.validator;
+package com.github.magdalenagola.multithreaded_online_bank.service.validator;
 
 import com.github.magdalenagola.multithreaded_online_bank.repository.AccountRepository;
 import org.springframework.stereotype.Component;
@@ -7,7 +7,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Component
-public class AccountValidator implements ConstraintValidator<ExistingNumber,String> {
+class AccountValidator implements ConstraintValidator<ExistingNumber,String> {
 
     private final AccountRepository accountRepository;
 

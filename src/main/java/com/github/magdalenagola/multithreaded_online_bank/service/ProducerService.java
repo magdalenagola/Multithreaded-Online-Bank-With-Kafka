@@ -14,7 +14,7 @@ import java.util.concurrent.*;
 @Service
 @Validated
 public class ProducerService {
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(16);
     private final ReplyingKafkaTemplate<String, TransactionDTO, Reply> kafkaTemplate;
 
     public ProducerService(ReplyingKafkaTemplate<String, TransactionDTO, Reply> kafkaTemplate) {

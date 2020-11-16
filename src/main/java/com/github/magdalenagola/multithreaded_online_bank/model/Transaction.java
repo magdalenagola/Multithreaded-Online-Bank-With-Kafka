@@ -1,6 +1,5 @@
 package com.github.magdalenagola.multithreaded_online_bank.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,17 +32,5 @@ public class Transaction {
         this.date = date;
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
-    }
-
-    public Account getFromAccount() {
-        return fromAccount;
-    }
-
-    public Account getToAccount() {
-        return toAccount;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
     }
 }

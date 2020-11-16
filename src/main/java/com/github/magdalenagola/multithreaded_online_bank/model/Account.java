@@ -24,12 +24,4 @@ public class Account {
 
     @ManyToOne
     private User user;
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
 }
