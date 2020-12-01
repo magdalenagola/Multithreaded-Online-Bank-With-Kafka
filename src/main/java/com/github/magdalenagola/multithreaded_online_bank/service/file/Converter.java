@@ -1,4 +1,4 @@
-package com.github.magdalenagola.multithreaded_online_bank.file;
+package com.github.magdalenagola.multithreaded_online_bank.service.file;
 
 
 import com.github.magdalenagola.multithreaded_online_bank.model.TransactionDTO;
@@ -13,10 +13,9 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.TimeZone;
 
+class Converter implements Runnable {
 
-public class Converter implements Runnable {
-
-    private static Logger logger = LoggerFactory.getLogger(Converter.class);
+    private static final Logger logger = LoggerFactory.getLogger(Converter.class);
     private final String transactionData;
     private final ProducerService producerService;
 
@@ -40,13 +39,9 @@ public class Converter implements Runnable {
             String fromAccount = Optional.ofNullable(attributes[2]).orElseThrow(IllegalArgumentException::new);
             String toAccount = Optional.ofNullable(attributes[3]).orElseThrow(IllegalArgumentException::new);
             transaction = new TransactionDTO(amount, date, fromAccount, toAccount);
-            synchronized (Converter.class) {
-                logger.info("Transaction " + transaction.toString() + " was successfully converted");
-            }
+            logger.info("Transaction " + transaction.toString() + " was successfully converted");
         } catch (Exception e) {
-            synchronized (Converter.class) {
-                logger.error("Transaction " + transactionData + " was not converted\n" + e.toString());
-            }
+            logger.error("Transaction " + transactionData + " was not converted\n" + e.toString());
         }
         return Optional.ofNullable(transaction);
     }

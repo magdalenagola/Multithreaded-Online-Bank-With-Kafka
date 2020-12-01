@@ -1,10 +1,10 @@
-package com.github.magdalenagola.multithreaded_online_bank.file;
+package com.github.magdalenagola.multithreaded_online_bank.service.file;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FileUploadRunner implements CommandLineRunner {
+class FileUploadRunner implements CommandLineRunner {
 
     private final FileReader fileReader;
 
@@ -14,6 +14,7 @@ public class FileUploadRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        Thread.sleep(3000);
         fileReader.read();
     }
 }

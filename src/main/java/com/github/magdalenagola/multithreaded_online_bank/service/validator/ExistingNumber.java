@@ -1,4 +1,4 @@
-package com.github.magdalenagola.multithreaded_online_bank.validator;
+package com.github.magdalenagola.multithreaded_online_bank.service.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
